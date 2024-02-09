@@ -2,9 +2,7 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 const verificaToken = (req, res, next) => {
-  const authorizationHeader = req.headers.authorization || null;
-  
-  const token = authorizationHeader ? authorizationHeader : null;
+  const token = req.headers.authorization || null;
 
   if (!token) {
     return res.status(401).json({ mensagem: "Usuário não autorizado" });
@@ -17,8 +15,6 @@ const verificaToken = (req, res, next) => {
 
     next();
   } catch (error) {
-    console.log(error);
-
     return res.status(401).json({ mensagem: "Token inválido" });
   }
 };
