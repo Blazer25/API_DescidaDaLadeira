@@ -18,7 +18,7 @@ router.post("/auth/login", controllerAuth.login);
 router.get("/auth/verificar-token", controllerAuth.verificarToken);
 
 // Rotas de usuário
-router.get("/usuario/:usuario", verificaToken, controllerUsuario.getUsuario);
+router.get("/usuario/:usuario", verificaToken, controllerUsuario.listaUsuario);
 
 //rotas equipes
 router.post("/equipe/registrar", controllerEquipe.registrar)
