@@ -1,6 +1,4 @@
-const Equipe = require("../modelos/Equipe.js");
-const validacoesEquipe = require("../middlewares/validacoes/equipe.js");
-const consultasEquipe = require("../servicos/mongo/consultas/equipes.js");
+const registrarEquipe = require("../comandos/equipes/registrarEquipe");
 
 const equipeController = {};
 
@@ -8,25 +6,16 @@ equipeController.registrar = async (req, res) => {
   try {
     const { nome, quantidadeIntegrantes, integrantes } = req.body;
 
-    const resValidacoes = validacoesEquipe.validarInformacoesRegistrarEquipe({
+    const { erro, status, mensagem } = await registrarEquipe.executar({
       nome,
       quantidadeIntegrantes,
       integrantes,
     });
 
-    if (resValidacoes.erro && resValidacoes.mensagem) {
-      return res.status(400).json({ mensagem: resValidacoes.mensagem });
-    }
+    if (erro) return res.status(status).json({ mensagem });
 
-    const equipe = new Equipe({
-      nome,
-      quantidadeIntegrantes,
-      integrantes,
-    });
-    equipe.save();
-    res.status(201).json({ mensagem: "Equipe registrada com sucesso!" });
+    res.status(status).json({ mensagem });
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       mensagem: "Erro interno do servidor, tente novamente mais tarde",
     });
