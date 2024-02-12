@@ -1,4 +1,6 @@
-const registrarEquipe = require("../comandos/equipes/registrarEquipe");
+const registrarEquipe = require("../comandos/equipe/registrarEquipe");
+const alterarEquipe = require("../comandos/equipe/alterarEquipe");
+const listarEquipes = require("../consultas/equipe/listarEquipes");
 
 const equipeController = {};
 
@@ -24,38 +26,37 @@ equipeController.registrar = async (req, res) => {
 
 equipeController.listar = async (req, res) => {
   try {
-    const resultado = await consultasEquipe.listarTodasEquipes();
-    console.log(resultado);
+    const { erro, status, mensagem, data } = await listarEquipes.executar({});
 
-    if (!resultado || !resultado.length) {
-      res.status(404).json({
-        mensagem: "Nenhuma equipe encontrada.",
-        total: 0,
-        equipes: [],
-      });
-      return;
-    }
+    if (erro) return res.status(status).json({ mensagem });
 
-    const esquipesMapeadas = resultado.map((equipe) => {
-      return {
-        nome: equipe.nome,
-        quantidadeIntegrantes: equipe.quantidadeIntegrantes,
-        integrantes: equipe.integrantes.map((integrante) => {
-          return {
-            nome: integrante.nome,
-            RA: integrante.RA,
-          };
-        }),
-      };
-    });
-
-    res.status(200).json({
-      mensagem: "Equipes encontradas.",
-      total: resultado.length,
-      equipes: esquipesMapeadas,
+    res.status(status).json({
+      mensagem,
+      total: data.esquipesMapeadas.length,
+      equipes: data.esquipesMapeadas,
     });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      mensagem: "Erro interno do servidor, tente novamente mais tarde",
+    });
+  }
+};
+
+equipeController.alterar = async (req, res) => {
+  try {
+    const { nomeEquipe, dadosIntegrantes } = req.body;
+    const { codigoEquipe } = req.params;
+
+    const { erro, status, mensagem } = await alterarEquipe.executar({
+      codigoEquipe,
+      nomeEquipe,
+      dadosIntegrantes,
+    });
+
+    if (erro) return res.status(status).json({ mensagem });
+
+    res.status(status).json({ mensagem });
+  } catch (err) {
     res.status(500).json({
       mensagem: "Erro interno do servidor, tente novamente mais tarde",
     });
