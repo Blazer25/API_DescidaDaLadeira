@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 const StatusError = require("../../helpers/status/StatusError");
 const { StatusOk } = require("../../helpers/status/StatusOk");
 const Equipe = require("../../modelos/Equipe");
@@ -99,6 +100,7 @@ function criarEquipe({ nome, quantidadeIntegrantes, integrantes }) {
     nome,
     quantidadeIntegrantes,
     integrantes,
+    codigo: uuidv4()
   });
 
   return equipe;
