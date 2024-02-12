@@ -1,8 +1,8 @@
-const listaUsuario = require("../consultas/usuario/listaUsuario.js");
+const listaUsuario = require("../consultas/usuario/listarUsuario.js");
 
 const usuarioController = {};
 
-usuarioController.listaUsuario = async (req, res) => {
+usuarioController.listar = async (req, res) => {
   try {
     const login = req.params.usuario;
     const { erro, status, mensagem, data } = await listaUsuario.executar({
