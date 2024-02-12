@@ -49,7 +49,6 @@ authController.verificarToken = async (req, res) => {
       res.json({ mensagem: "Token válido" });
     });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ mensagem: "Erro interno do servidor" });
   }
 };
