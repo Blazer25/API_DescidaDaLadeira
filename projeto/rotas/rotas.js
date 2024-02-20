@@ -28,6 +28,7 @@ router.get("/equipe/listar", verificaToken, controllerEquipe.listar)
 
 //rotas corridas
 router.post("/corrida/registrar", verificaToken, controllerCorrida.registrar)
+router.get("/corridas", verificaToken, controllerCorrida.listar)
 
 
 module.exports = router;
