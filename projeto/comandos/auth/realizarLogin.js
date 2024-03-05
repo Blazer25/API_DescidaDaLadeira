@@ -17,7 +17,7 @@ async function executar({ login, senha }) {
         usuario: usuario.login,
       },
       status: 201,
-      mensagem: "Usuário criado com sucesso!",
+      mensagem: "Login realizado com sucesso!",
     });
   } catch (error) {
     return {
