@@ -1,5 +1,6 @@
 const registrarUsuario = require("../comandos/auth/registrarUsuario.js");
 const realizarLogin = require("../comandos/auth/realizarLogin.js");
+const verificacoesToken = require("../middlewares/token/token.js");
 
 const authController = {};
 
