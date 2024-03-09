@@ -1,5 +1,6 @@
 const registrarEquipe = require("../comandos/equipe/registrarEquipe");
 const alterarEquipe = require("../comandos/equipe/alterarEquipe");
+const inativarEquipe = require("../comandos/equipe/inativarEquipe");
 const listarEquipes = require("../consultas/equipe/listarEquipes");
 
 const equipeController = {};
@@ -51,6 +52,24 @@ equipeController.alterar = async (req, res) => {
       codigoEquipe,
       nomeEquipe,
       dadosIntegrantes,
+    });
+
+    if (erro) return res.status(status).json({ mensagem });
+
+    res.status(status).json({ mensagem });
+  } catch (err) {
+    res.status(500).json({
+      mensagem: "Erro interno do servidor, tente novamente mais tarde",
+    });
+  }
+};
+
+equipeController.inativar = async (req, res) => {
+  try {
+    const { codigoEquipe } = req.query;
+
+    const { erro, status, mensagem } = await inativarEquipe.executar({
+      codigoEquipe
     });
 
     if (erro) return res.status(status).json({ mensagem });
