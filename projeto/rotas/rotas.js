@@ -30,6 +30,7 @@ router.post("/equipe/inativar/:codigoEquipe", verificaToken, controllerEquipe.in
 //rotas corridas
 router.post("/corrida", verificaToken, controllerCorrida.registrar)
 router.get("/corridas", verificaToken, controllerCorrida.listar)
+router.delete("/corrida", verificaToken, controllerCorrida.deletar)
 
 
 module.exports = router;
