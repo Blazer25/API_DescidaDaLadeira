@@ -25,7 +25,7 @@ router.get("/usuario/:usuario", verificaToken, controllerUsuario.listar);
 router.post("/equipe", controllerEquipe.registrar)
 router.patch("/equipe/:codigoEquipe", verificaToken, controllerEquipe.alterar)
 router.get("/equipes", verificaToken, controllerEquipe.listar)
-router.delete("/equipe/:codigoEquipe", verificaToken, controllerEquipe.excluir)
+router.post("/equipe/inativar/:codigoEquipe", verificaToken, controllerEquipe.inativar)
 
 //rotas corridas
 router.post("/corrida", verificaToken, controllerCorrida.registrar)
