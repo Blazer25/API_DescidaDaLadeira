@@ -100,7 +100,8 @@ function criarEquipe({ nome, quantidadeIntegrantes, integrantes }) {
     nome,
     quantidadeIntegrantes,
     integrantes,
-    codigo: uuidv4()
+    codigo: uuidv4(),
+    ativa: true
   });
 
   return equipe;
