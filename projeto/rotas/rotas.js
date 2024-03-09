@@ -22,12 +22,13 @@ router.get("/auth/verificar-token", controllerAuth.verificarToken);
 router.get("/usuario/:usuario", verificaToken, controllerUsuario.listar);
 
 //rotas equipes
-router.post("/equipe/registrar", controllerEquipe.registrar)
-router.patch("/equipe/alterar/:codigoEquipe", verificaToken, controllerEquipe.alterar)
-router.get("/equipe/listar", verificaToken, controllerEquipe.listar)
+router.post("/equipe", controllerEquipe.registrar)
+router.patch("/equipe/:codigoEquipe", verificaToken, controllerEquipe.alterar)
+router.get("/equipes", verificaToken, controllerEquipe.listar)
+router.delete("/equipe/:codigoEquipe", verificaToken, controllerEquipe.excluir)
 
 //rotas corridas
-router.post("/corrida/registrar", verificaToken, controllerCorrida.registrar)
+router.post("/corrida", verificaToken, controllerCorrida.registrar)
 router.get("/corridas", verificaToken, controllerCorrida.listar)
 
 
