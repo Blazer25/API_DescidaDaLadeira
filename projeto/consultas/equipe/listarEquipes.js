@@ -13,6 +13,7 @@ async function executar({}) {
     const esquipesMapeadas = resultado.map((equipe) => {
       return {
         codigo: equipe.codigo,
+        ativa: equipe.ativa,
         nome: equipe.nome,
         quantidadeIntegrantes: equipe.quantidadeIntegrantes,
         integrantes: equipe.integrantes.map((integrante) => {

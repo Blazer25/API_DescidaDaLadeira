@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 const StatusError = require("../../helpers/status/StatusError");
 const { StatusOk } = require("../../helpers/status/StatusOk");
 const Equipe = require("../../modelos/Equipe");
@@ -41,34 +41,31 @@ function validarParametros({ nome, quantidadeIntegrantes, integrantes }) {
     quantidadeIntegrantes > 5 ||
     !Number.isInteger(quantidadeIntegrantes)
   ) {
-    return {
-      erro: true,
-      mensagem:
-        "A quantidade integrantes da equipe deve ser um número inteiro entre 1 e 5.",
-    };
+    throw new StatusError(
+      "A quantidade integrantes da equipe deve ser um número inteiro entre 1 e 5.",
+      400
+    );
   }
 
   if (!Array.isArray(integrantes)) {
-    return {
-      erro: true,
-      mensagem: "O Campo integrantes deve ser um Array de objetos.",
-    };
+    throw new StatusError(
+      "O Campo integrantes deve ser um Array de objetos.",
+      400
+    );
   }
 
   if (integrantes.length !== quantidadeIntegrantes) {
-    return {
-      erro: true,
-      mensagem:
-        "O campo quantidade de integrantes deve ser igual a quantidade de integrantes enviada.",
-    };
+    throw new StatusError(
+      "O campo quantidade de integrantes deve ser igual a quantidade de integrantes enviada.",
+      400
+    );
   }
 
   if (integrantes.length <= 0 || integrantes.length > 5) {
-    return {
-      erro: true,
-      mensagem:
-        "A quantidade de objetos enviados no campo membro deve ser maior que zero e menor que 5.",
-    };
+    throw new StatusError(
+      "A quantidade de objetos enviados no campo membro deve ser maior que zero e menor que 5.",
+      400
+    );
   }
 
   for (let membro = 0; membro < integrantes.length; membro++) {
@@ -76,35 +73,39 @@ function validarParametros({ nome, quantidadeIntegrantes, integrantes }) {
       !integrantes[membro].nome ||
       typeof integrantes[membro].nome !== "string"
     ) {
-      return {
-        erro: true,
-        mensagem: `O campo 'nome' do ${
+      throw new StatusError(
+        `O campo 'nome' do ${
           membro + 1
         }° membro é obrigatório e deve ser do tipo texto.`,
-      };
+        400
+      );
     }
 
     if (!integrantes[membro].RA || typeof integrantes[membro].RA !== "string") {
-      return {
-        erro: true,
-        mensagem: `O campo 'RA' do ${
+      throw new StatusError(
+        `O campo 'RA' do ${
           membro + 1
         }° membro é obrigatório e deve ser do tipo texto.`,
-      };
+        400
+      );
     }
   }
 }
 
 function criarEquipe({ nome, quantidadeIntegrantes, integrantes }) {
-  const equipe = new Equipe({
-    nome,
-    quantidadeIntegrantes,
-    integrantes,
-    codigo: uuidv4(),
-    ativa: true
-  });
+  try {
+    const equipe = new Equipe({
+      nome,
+      quantidadeIntegrantes,
+      integrantes,
+      codigo: uuidv4(),
+      ativa: true,
+    });
 
-  return equipe;
+    return equipe;
+  } catch (error) {
+    throw new StatusError(error.message, 400);
+  }
 }
 
 async function gravarEquipe({ equipe }) {

@@ -1,10 +1,12 @@
 const StatusError = require("../../helpers/status/StatusError");
 const { StatusOk } = require("../../helpers/status/StatusOk");
-const Equipe = require("../../modelos/Equipe");
+const repositorioEquipes = require("../../servicos/mongo/repositorios/equipes");
+const consultarEquipe = require("../../servicos/mongo/consultas/equipes");
 
 async function executar({ codigoEquipe }) {
   try {
     validarParametros({ codigoEquipe });
+    await buscarEquipe({ codigoEquipe });
     await inativar({ codigoEquipe });
 
     return StatusOk({
@@ -30,15 +32,25 @@ function validarParametros({ codigoEquipe }) {
   }
 }
 
-async function inativar({ codigoEquipe }) {
-  const equipe = Equipe.findOneAndUpdate(
-    { codigo: codigoEquipe },
-    { ativa: false }
-  );
-  if (!equipe) {
-    throw new StatusError("Equipe não encontrada para ser editada!", 404);
+async function buscarEquipe({ codigoEquipe }) {
+  try {
+    const equipe = await consultarEquipe.listarEquipePeloCodigo({
+      codigo: codigoEquipe,
+    });
+    if (!equipe) {
+      throw new StatusError("Equipe não encontrada para ser inativada!", 404);
+    }
+  } catch (error) {
+    throw new StatusError(error.message, error.status)
   }
-  return equipe;
+}
+
+async function inativar({ codigoEquipe }) {
+  try {
+    await repositorioEquipes.inativarEquipe({ codigo: codigoEquipe });
+  } catch (error) {
+    throw new StatusError(error.message, error.status)
+  }
 }
 
 module.exports = {

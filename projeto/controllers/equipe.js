@@ -66,10 +66,10 @@ equipeController.alterar = async (req, res) => {
 
 equipeController.inativar = async (req, res) => {
   try {
-    const { codigoEquipe } = req.query;
+    const { codigoEquipe } = req.params;
 
     const { erro, status, mensagem } = await inativarEquipe.executar({
-      codigoEquipe
+      codigoEquipe,
     });
 
     if (erro) return res.status(status).json({ mensagem });
