@@ -2,9 +2,10 @@ const StatusError = require("../../helpers/status/StatusError");
 const { StatusOk } = require("../../helpers/status/StatusOk");
 const consultasEquipe = require("../../servicos/mongo/consultas/equipes");
 
-async function executar({}) {
+async function executar({filtros}) {
+  console.log("@@@@@@", filtros)
   try {
-    const resultado = await consultasEquipe.listarTodasEquipes();
+    const resultado = await consultasEquipe.listarTodasEquipes({filtros});
 
     if (!resultado || !resultado.length) {
       throw new StatusError("Nenhuma equipe encontrada.", 404);

@@ -16,9 +16,9 @@ const atualizarEquipe = async (
   }
 };
 
-const inativarEquipe = async ({ codigo }) => {
+const inativarAtivarEquipe = async ({ codigo, statusAlterar }) => {
   try {
-    return await Equipe.updateOne({ codigo }, { ativa: false });
+    return await Equipe.updateOne({ codigo }, { ativa: statusAlterar });
   } catch (error) {
     throw new StatusError(error.message, error.status)
   }
@@ -26,5 +26,5 @@ const inativarEquipe = async ({ codigo }) => {
 
 module.exports = {
   atualizarEquipe,
-  inativarEquipe
+  inativarAtivarEquipe
 };

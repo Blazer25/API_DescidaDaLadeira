@@ -38,7 +38,6 @@ corridaController.listar = async (req, res) => {
       corridas: data.corridas,
     });
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       mensagem: "Erro interno do servidor, tente novamente mais tarde",
     });

@@ -1,6 +1,6 @@
 const registrarEquipe = require("../comandos/equipe/registrarEquipe");
 const alterarEquipe = require("../comandos/equipe/alterarEquipe");
-const inativarEquipe = require("../comandos/equipe/inativarEquipe");
+const inativarAtivarEquipe = require("../comandos/equipe/inativarAtivarEquipe");
 const listarEquipes = require("../consultas/equipe/listarEquipes");
 
 const equipeController = {};
@@ -27,7 +27,14 @@ equipeController.registrar = async (req, res) => {
 
 equipeController.listar = async (req, res) => {
   try {
-    const { erro, status, mensagem, data } = await listarEquipes.executar({});
+    const { ativas } = req.query;
+    const filtros = {
+      ativas,
+    };
+    console.log(filtros)
+    const { erro, status, mensagem, data } = await listarEquipes.executar({
+      filtros,
+    });
 
     if (erro) return res.status(status).json({ mensagem });
 
@@ -64,11 +71,11 @@ equipeController.alterar = async (req, res) => {
   }
 };
 
-equipeController.inativar = async (req, res) => {
+equipeController.inativarAtivar = async (req, res) => {
   try {
     const { codigoEquipe } = req.params;
 
-    const { erro, status, mensagem } = await inativarEquipe.executar({
+    const { erro, status, mensagem } = await inativarAtivarEquipe.executar({
       codigoEquipe,
     });
 

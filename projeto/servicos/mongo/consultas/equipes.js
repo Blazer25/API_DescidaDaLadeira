@@ -1,8 +1,16 @@
 const Equipe = require("../../../modelos/Equipe");
 
-const listarTodasEquipes = async () => {
+const listarTodasEquipes = async ({ filtros }) => {
+  console.log("@@@#######", filtros);
+
   try {
-    return await Equipe.find({}, { _id: 0 });
+    let filtro = {};
+    if (filtros) {
+      if (filtros.ativas) {
+        filtro["ativa"] = true;
+      }
+    }
+    return await Equipe.find(filtro, { _id: 0 });
   } catch (error) {
     throw new Error(error.message);
   }

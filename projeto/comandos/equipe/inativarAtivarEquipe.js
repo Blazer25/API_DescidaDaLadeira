@@ -6,19 +6,19 @@ const consultarEquipe = require("../../servicos/mongo/consultas/equipes");
 async function executar({ codigoEquipe }) {
   try {
     validarParametros({ codigoEquipe });
-    await buscarEquipe({ codigoEquipe });
-    await inativar({ codigoEquipe });
+    const equipe = await buscarEquipe({ codigoEquipe });
+    await inativarOuAtivar({ codigoEquipe, equipe });
 
     return StatusOk({
       data: null,
       status: 200,
-      mensagem: "Equipe inativa com sucesso!",
+      mensagem: `Equipe ${equipe.ativa ? "inativada" : "ativada"} com sucesso!`
     });
   } catch (error) {
     return {
       erro: true,
       status: error.status || 500,
-      mensagem: error.message || "Erro desconhecido ao inativar equipe.",
+      mensagem: error.message || "Erro desconhecido ao inativar/ativar equipe.",
     };
   }
 }
@@ -38,16 +38,19 @@ async function buscarEquipe({ codigoEquipe }) {
       codigo: codigoEquipe,
     });
     if (!equipe) {
-      throw new StatusError("Equipe não encontrada para ser inativada!", 404);
+      throw new StatusError("Equipe não encontrada para ser inativada ou ativada!", 404);
     }
+
+    return equipe
   } catch (error) {
     throw new StatusError(error.message, error.status)
   }
 }
 
-async function inativar({ codigoEquipe }) {
+async function inativarOuAtivar({ codigoEquipe, equipe }) {
   try {
-    await repositorioEquipes.inativarEquipe({ codigo: codigoEquipe });
+    const statusAlterar = !equipe.ativa
+    await repositorioEquipes.inativarAtivarEquipe({ codigo: codigoEquipe, statusAlterar });
   } catch (error) {
     throw new StatusError(error.message, error.status)
   }
