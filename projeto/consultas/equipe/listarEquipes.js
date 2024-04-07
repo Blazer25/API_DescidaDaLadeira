@@ -3,7 +3,6 @@ const { StatusOk } = require("../../helpers/status/StatusOk");
 const consultasEquipe = require("../../servicos/mongo/consultas/equipes");
 
 async function executar({filtros}) {
-  console.log("@@@@@@", filtros)
   try {
     const resultado = await consultasEquipe.listarTodasEquipes({filtros});
 

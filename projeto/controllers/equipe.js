@@ -31,7 +31,6 @@ equipeController.listar = async (req, res) => {
     const filtros = {
       ativas,
     };
-    console.log(filtros)
     const { erro, status, mensagem, data } = await listarEquipes.executar({
       filtros,
     });

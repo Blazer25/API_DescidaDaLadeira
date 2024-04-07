@@ -1,8 +1,6 @@
 const Equipe = require("../../../modelos/Equipe");
 
 const listarTodasEquipes = async ({ filtros }) => {
-  console.log("@@@#######", filtros);
-
   try {
     let filtro = {};
     if (filtros) {
