@@ -88,7 +88,7 @@ function validarParametros({
       );
     }
 
-    if (typeof tempoChegada.posicao !== "string") {
+    if (typeof tempoChegada.posicao !== "number") {
       throw new StatusError(
         `A posição de chegada do ${
           index + 1
