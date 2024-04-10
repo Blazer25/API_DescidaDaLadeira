@@ -9,6 +9,7 @@ async function executar({
   dataHoraFim,
   tempoTotal,
   temposChegadas,
+  estagio,
 }) {
   try {
     validarParametros({
@@ -16,6 +17,7 @@ async function executar({
       dataHoraFim,
       tempoTotal,
       temposChegadas,
+      estagio,
     });
 
     await verificaCodigoEquipe({ temposChegadas });
@@ -25,6 +27,7 @@ async function executar({
       dataHoraFim,
       tempoTotal,
       temposChegadas,
+      estagio
     });
 
     await gravarCorrida({ corrida });
@@ -48,6 +51,7 @@ function validarParametros({
   dataHoraFim,
   tempoTotal,
   temposChegadas,
+  estagio,
 }) {
   if (!dataHoraInicio || !dataHoraFim || !tempoTotal || !temposChegadas) {
     throw new StatusError(
@@ -163,6 +167,19 @@ function validarParametros({
       }
     });
   });
+  if (typeof estagio !== "string") {
+    throw new StatusError(
+      "O estágio da corrida deve ser do tipo 'texto'.",
+      400
+    );
+  }
+
+  if (!["GRUPOS", "OITAVAS", "QUARTAS", "SEMI", "FINAL"].includes(estagio)) {
+    throw new StatusError(
+      'O estágio deve ser "GRUPOS", "OITAVAS", "QUARTAS", "SEMI" ou "FINAL"',
+      400
+    );
+  }
 }
 
 async function verificaCodigoEquipe({ temposChegadas }) {
@@ -191,6 +208,7 @@ function criarCorrida({
   dataHoraFim,
   tempoTotal,
   temposChegadas,
+  estagio
 }) {
   const corrida = new Corrida({
     codigo: uuidv4(),
@@ -198,6 +216,7 @@ function criarCorrida({
     dataHoraFim,
     tempoTotal,
     temposChegadas,
+    estagio
   });
 
   return corrida;

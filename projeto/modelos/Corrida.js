@@ -24,6 +24,7 @@ const chegadaSchema = new mongoose.Schema(
 const corridaSchema = new mongoose.Schema(
   {
     codigo: String,
+    estagio: String,
     dataHoraInicio: String,
     dataHoraFim: String,
     tempoTotal: String,

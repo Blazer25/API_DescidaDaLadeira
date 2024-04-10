@@ -6,7 +6,7 @@ const corridaController = {};
 
 corridaController.registrar = async (req, res) => {
   try {
-    const { dataHoraInicio, dataHoraFim, tempoTotal, temposChegadas } =
+    const { dataHoraInicio, dataHoraFim, tempoTotal, temposChegadas, estagio } =
       req.body;
 
     const { erro, status, mensagem } = await registrarCorrida.executar({
@@ -14,6 +14,7 @@ corridaController.registrar = async (req, res) => {
       dataHoraFim,
       tempoTotal,
       temposChegadas,
+      estagio
     });
 
     if (erro) return res.status(status).json({ mensagem });

@@ -17,12 +17,14 @@ async function executar({}) {
         dataHoraFim,
         tempoTotal,
         temposChegadas,
+        estagio
       }) => ({
         codigo,
         dataHoraInicio,
         dataHoraFim,
         tempoTotal,
         temposChegadas,
+        estagio
       })
     );
 
