@@ -8,7 +8,7 @@ const listarTodasEquipes = async ({ filtros }) => {
         filtro["ativa"] = true;
       }
     }
-    return await Equipe.find(filtro, { _id: 0 });
+    return await Equipe.find(filtro, { _id: 0 }).sort({ nome: 1 });
   } catch (error) {
     throw new Error(error.message);
   }
