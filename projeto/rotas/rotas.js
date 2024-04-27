@@ -8,6 +8,7 @@ const controllerUsuario = require("../controllers/usuario");
 const controllerAuth = require("../controllers/auth");
 const controllerEquipe = require("../controllers/equipe");
 const controllerCorrida = require("../controllers/corrida");
+const controllerRanking = require("../controllers/ranking.js")
 
 // Rota padrão de verificação
 router.get("/", controllerServidor.getHealth);
@@ -22,7 +23,7 @@ router.get("/auth/verificar-token", controllerAuth.verificarToken);
 router.get("/usuario/:usuario", verificaToken, controllerUsuario.listar);
 
 //rotas equipes
-router.post("/equipe", controllerEquipe.registrar)
+router.post("/equipe", verificaToken, controllerEquipe.registrar)
 router.patch("/equipe/:codigoEquipe", verificaToken, controllerEquipe.alterar)
 router.get("/equipes", verificaToken, controllerEquipe.listar)
 router.post("/equipe/inativarAtivar/:codigoEquipe", verificaToken, controllerEquipe.inativarAtivar)
@@ -32,5 +33,6 @@ router.post("/corrida", verificaToken, controllerCorrida.registrar)
 router.get("/corridas", verificaToken, controllerCorrida.listar)
 router.delete("/corrida", verificaToken, controllerCorrida.deletar)
 
+router.get("/ranking", controllerRanking.listar)
 
 module.exports = router;
