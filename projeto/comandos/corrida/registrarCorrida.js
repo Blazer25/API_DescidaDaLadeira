@@ -174,9 +174,9 @@ function validarParametros({
     );
   }
 
-  if (!["GRUPOS", "OITAVAS", "QUARTAS", "SEMI", "FINAL"].includes(estagio)) {
+  if (!["fase1", "", "fase2", "fase3", "fase4", "fase5"].includes(estagio)) {
     throw new StatusError(
-      'O estágio deve ser "GRUPOS", "OITAVAS", "QUARTAS", "SEMI" ou "FINAL"',
+      'O estágio deve ser "fase1", "fase2", "fase3", "fase4", ou "fase5"',
       400
     );
   }

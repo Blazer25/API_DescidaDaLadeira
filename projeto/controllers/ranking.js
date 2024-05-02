@@ -1,18 +1,17 @@
-const listarCorridas = require("../consultas/corrida/listarCorridas");
+const listarRanking = require("../consultas/ranking/listarRanking");
 
 const rankingController = {};
 
 
 rankingController.listar = async (req, res) => {
   try {
-    const { erro, status, mensagem, data } = await listarCorridas.executar({});
+    const { erro, status, mensagem, data } = await listarRanking.executar({});
 
     if (erro) return res.status(status).json({ mensagem });
 
     res.status(status).json({
       mensagem,
-      total: data.corridas.length,
-      corridas: data.corridas,
+      ranking: data.ranking,
     });
   } catch (err) {
     res.status(500).json({

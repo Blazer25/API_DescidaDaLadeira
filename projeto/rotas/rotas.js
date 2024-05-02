@@ -33,6 +33,7 @@ router.post("/corrida", verificaToken, controllerCorrida.registrar)
 router.get("/corridas", verificaToken, controllerCorrida.listar)
 router.delete("/corrida", verificaToken, controllerCorrida.deletar)
 
+//rotas do ranking
 router.get("/ranking", controllerRanking.listar)
 
 module.exports = router;

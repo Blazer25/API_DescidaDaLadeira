@@ -15,36 +15,68 @@ async function executar({}) {
       fase2: corridas.filter(({ estagio }) => estagio === "fase2"),
       fase3: corridas.filter(({ estagio }) => estagio === "fase3"),
       fase4: corridas.filter(({ estagio }) => estagio === "fase4"),
+      fase5: corridas.filter(({ estagio }) => estagio === "fase5"),
     };
 
-    const { fase1, fase2, fase3, fase4 } = corridasSeparadasPorEstagio;
+    const { fase1, fase2, fase3, fase4, fase5 } = corridasSeparadasPorEstagio;
 
-    const ranking = [];
+    const melhoresTempos = {
+      fase1: {},
+      fase2: {},
+      fase3: {},
+      fase4: {},
+      fase5: {},
+    };
 
-    fase1.forEach(({ temposChegadas }) => {
-      const { equipe, tempo } = temposChegadas;
-      const { nome, codigo } = equipe;
+    const fases = [
+      { fase: "fase1", faseSelecionada: fase1 },
+      {
+        fase: "fase2",
+        faseSelecionada: fase2,
+      },
+      {
+        fase: "fase3",
+        faseSelecionada: fase3,
+      },
+      {
+        fase: "fase4",
+        faseSelecionada: fase4,
+      },
+      {
+        fase: "fase5",
+        faseSelecionada: fase5,
+      },
+    ];
 
-      const temposEquipe = {};
+    fases.forEach((fase) => {
+      const faseAtual = fase.fase;
+      fase.faseSelecionada.forEach((corrida) => {
+        corrida.temposChegadas.forEach((chegada) => {
+          const codigo = chegada.equipe.codigo;
+          const tempoAtual = chegada.tempo;
 
-      if (temposEquipe[codigo]) {
-        if (tempo < temposEquipe[codigo]) {
-          temposEquipe[codigo] = tempo;
-        }
-      } else {
-        temposEquipe[codigo] = tempo;
-      }
-
-      
-
+          if (
+            !melhoresTempos[faseAtual][codigo] ||
+            tempoAtual < melhoresTempos[faseAtual][codigo].tempo
+          ) {
+            melhoresTempos[faseAtual][codigo] = {
+              tempo: tempoAtual,
+              equipe: {
+                codigo: chegada.equipe.codigo,
+                nome: chegada.equipe.nome,
+              },
+            };
+          }
+        });
+      });
     });
 
     return StatusOk({
       data: {
-        ranking: ranking,
+        ranking: melhoresTempos,
       },
       status: 200,
-      mensagem: "Ranking encontrado.",
+      mensagem: "Ranking com os melhores tempos encontrado.",
     });
   } catch (error) {
     return {
