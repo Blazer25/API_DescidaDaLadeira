@@ -29,9 +29,10 @@ equipeController.registrar = async (req, res) => {
 
 equipeController.listar = async (req, res) => {
   try {
-    const { ativas } = req.query;
+    const { ativas, nome } = req.query;
     const filtros = {
       ativas,
+      nome
     };
     const { erro, status, mensagem, data } = await listarEquipes.executar({
       filtros,

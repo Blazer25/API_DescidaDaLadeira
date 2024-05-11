@@ -8,6 +8,9 @@ const listarTodasEquipes = async ({ filtros }) => {
       if (filtros.ativas) {
         filtro["ativa"] = true;
       }
+      if (filtros.nome) {
+        filtro["nome"] = filtros.nome
+      }
     }
     return await Equipe.find(filtro, { _id: 0 }).sort({ nome: 1 });
   } catch (error) {
