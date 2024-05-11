@@ -9,7 +9,7 @@ const listarTodasEquipes = async ({ filtros }) => {
         filtro["ativa"] = true;
       }
       if (filtros.nome) {
-        filtro["nome"] = filtros.nome
+        filtro["nome"] = { $regex: filtros.nome, $options: "i" };
       }
     }
     return await Equipe.find(filtro, { _id: 0 }).sort({ nome: 1 });
@@ -28,7 +28,7 @@ const listarEquipePeloCodigo = async ({ codigo }) => {
 
 const listarTodasEquipesPorFase = async ({ filtros = {} }) => {
   try {
-    return await EquipePorFase.find(filtros, { _id: 0 });
+    return await EquipePorFase.find(filtros, { _id: 0 }.sort({ insercao: 1 }));
   } catch (error) {
     throw new Error(error.message);
   }
