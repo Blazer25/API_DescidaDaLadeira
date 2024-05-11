@@ -1,4 +1,5 @@
 const Equipe = require("../../../modelos/Equipe");
+const EquipePorFase = require("../../../modelos/EquipePorFase");
 
 const listarTodasEquipes = async ({ filtros }) => {
   try {
@@ -22,7 +23,16 @@ const listarEquipePeloCodigo = async ({ codigo }) => {
   }
 };
 
+const listarTodasEquipesPorFase = async ({ filtros = {} }) => {
+  try {
+    return await EquipePorFase.find(filtros, { _id: 0 });
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 module.exports = {
   listarTodasEquipes,
   listarEquipePeloCodigo,
+  listarTodasEquipesPorFase,
 };

@@ -24,9 +24,11 @@ router.get("/usuario/:usuario", verificaToken, controllerUsuario.listar);
 
 //rotas equipes
 router.post("/equipe", verificaToken, controllerEquipe.registrar)
+router.post("/equipes/porFase", verificaToken, controllerEquipe.registrarPorFase)
+router.post("/equipe/inativarAtivar/:codigoEquipe", verificaToken, controllerEquipe.inativarAtivar)
 router.patch("/equipe/:codigoEquipe", verificaToken, controllerEquipe.alterar)
 router.get("/equipes", verificaToken, controllerEquipe.listar)
-router.post("/equipe/inativarAtivar/:codigoEquipe", verificaToken, controllerEquipe.inativarAtivar)
+router.get("/equipes/porFase", verificaToken, controllerEquipe.listarPorFase)
 
 //rotas corridas
 router.post("/corrida", verificaToken, controllerCorrida.registrar)
