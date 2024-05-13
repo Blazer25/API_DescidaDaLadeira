@@ -10,25 +10,20 @@ const equipeSchema = new mongoose.Schema(
   { _id: true }
 );
 
-equipeSchema.pre("save", function (next) {
-  const equipe = this;
-  if (!equipe.isNew) {
-    return next();
-  }
-
-  EquipePorFase.findOne(
-    {},
-    {},
-    { sort: { insercao: -1 } },
-    function (err, lastEquipe) {
-      if (err || !lastEquipe) {
-        equipe.insercao = 1;
-      } else {
-        equipe.insercao = lastEquipe.insercao + 1;
-      }
-      next();
+equipeSchema.pre("save", async function (next) {
+  try {
+    const equipe = this;
+    if (!equipe.isNew) {
+      return next();
     }
-  );
+
+    const totalDocumentos = await EquipePorFase.countDocuments({});
+    equipe.insercao = totalDocumentos + 1;
+
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 const EquipePorFase = mongoose.model("EquipePorFase", equipeSchema);

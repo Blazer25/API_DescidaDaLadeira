@@ -28,7 +28,7 @@ const listarEquipePeloCodigo = async ({ codigo }) => {
 
 const listarTodasEquipesPorFase = async ({ filtros = {} }) => {
   try {
-    return await EquipePorFase.find(filtros, { _id: 0 }.sort({ insercao: 1 }));
+    return await EquipePorFase.find(filtros, { _id: 0 }).sort({ insercao: 1 });
   } catch (error) {
     throw new Error(error.message);
   }

@@ -37,6 +37,13 @@ function validarParametros({ equipes, fase }) {
       400
     );
   }
+
+  if (equipes.length > 3) {
+    throw new StatusError(
+      "A quantidade de equipes deve ser menor ou igual a 3.",
+      400
+    );
+  }
 }
 
 function criarEquipesPorFase({ equipes, fase }) {
