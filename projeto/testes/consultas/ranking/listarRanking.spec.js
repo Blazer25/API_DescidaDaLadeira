@@ -17,17 +17,54 @@ describe("Testes da função executar", () => {
       {
         estagio: "fase1",
         temposChegadas: [
-          { equipe: { codigo: "equipe1", nome: "Equipe 1" }, tempo: 300 },
-          { equipe: { codigo: "equipe2", nome: "Equipe 2" }, tempo: 250 },
+          {
+            equipe: { codigo: "equipe1", nome: "Equipe 1" },
+            tempo: "00:05:300",
+          },
+          {
+            equipe: { codigo: "equipe2", nome: "Equipe 2" },
+            tempo: "00:04:250",
+          },
+          {
+            equipe: { codigo: "equipe2", nome: "Equipe 2" },
+            tempo: "00:01:100",
+          },
         ],
       },
       {
         estagio: "fase2",
         temposChegadas: [
-          { equipe: { codigo: "equipe1", nome: "Equipe 1" }, tempo: 400 },
+          {
+            equipe: { codigo: "equipe1", nome: "Equipe 1" },
+            tempo: "00:06:400",
+          },
         ],
       },
-      // Adicione mais dados conforme necessário para cobrir todas as fases
+      {
+        estagio: "fase3",
+        temposChegadas: [
+          {
+            equipe: { codigo: "equipe1", nome: "Equipe 1" },
+            tempo: "00:05:300",
+          },
+          {
+            equipe: { codigo: "equipe1", nome: "Equipe 1" },
+            tempo: "00:05:300",
+          },
+          {
+            equipe: { codigo: "equipe2", nome: "Equipe 2" },
+            tempo: "00:04:250",
+          },
+          {
+            equipe: { codigo: "equipe2", nome: "Equipe 2" },
+            tempo: "00:00:010",
+          },
+          {
+            equipe: { codigo: "equipe3", nome: "Equipe 3" },
+            tempo: "00:01:100",
+          },
+        ],
+      },
     ];
 
     consultasCorrida.listarTodasCorridas = jest
@@ -41,35 +78,51 @@ describe("Testes da função executar", () => {
 
     const resultado = await executar({});
 
-    expect(resultado).toEqual({
+    expect(resultado).toStrictEqual({
       data: {
         ranking: {
-          fase1: {
-            equipe1: {
-              equipe: {
-                codigo: "equipe1",
-                nome: "Equipe 1",
-              },
-              tempo: 300,
-            },
-            equipe2: {
-              tempo: 250,
+          fase1: [
+            {
               equipe: { codigo: "equipe2", nome: "Equipe 2" },
+              tempo: 1100,
+              tempoFormatado: "00:01:100",
             },
-          },
-          fase2: {
-            equipe1: {
-              tempo: 400,
+            {
               equipe: { codigo: "equipe1", nome: "Equipe 1" },
+              tempo: 5300,
+              tempoFormatado: "00:05:300",
             },
-          },
-          fase3: {},
-          fase4: {},
-          fase5: {},
+          ],
+          fase2: [
+            {
+              equipe: { codigo: "equipe1", nome: "Equipe 1" },
+              tempo: 6400,
+              tempoFormatado: "00:06:400",
+            },
+          ],
+          fase3: [
+            {
+              equipe: { codigo: "equipe2", nome: "Equipe 2" },
+              tempo: 10,
+              tempoFormatado: "00:00:010",
+            },
+            {
+              equipe: { codigo: "equipe3", nome: "Equipe 3" },
+              tempo: 1100,
+              tempoFormatado: "00:01:100",
+            },
+            {
+              equipe: { codigo: "equipe1", nome: "Equipe 1" },
+              tempo: 5300,
+              tempoFormatado: "00:05:300",
+            },
+          ],
+          fase4: [],
+          fase5: [],
         },
       },
-      status: 200,
       mensagem: "Ranking com os melhores tempos encontrado.",
+      status: 200,
     });
   });
 

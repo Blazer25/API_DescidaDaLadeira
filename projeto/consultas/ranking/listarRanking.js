@@ -2,6 +2,12 @@ const StatusError = require("../../helpers/status/StatusError");
 const { StatusOk } = require("../../helpers/status/StatusOk");
 const consultasCorrida = require("../../servicos/mongo/consultas/corridas");
 
+// Função auxiliar para converter tempo no formato "minuto:segundo:milissegundo" para milissegundos
+function converterTempoParaMilissegundos(tempo) {
+  const [minuto, segundo, milissegundo] = tempo.split(":").map(Number);
+  return minuto * 60 * 1000 + segundo * 1000 + milissegundo;
+}
+
 async function executar({}) {
   try {
     const corridas = await consultasCorrida.listarTodasCorridas();
@@ -30,37 +36,25 @@ async function executar({}) {
 
     const fases = [
       { fase: "fase1", faseSelecionada: fase1 },
-      {
-        fase: "fase2",
-        faseSelecionada: fase2,
-      },
-      {
-        fase: "fase3",
-        faseSelecionada: fase3,
-      },
-      {
-        fase: "fase4",
-        faseSelecionada: fase4,
-      },
-      {
-        fase: "fase5",
-        faseSelecionada: fase5,
-      },
+      { fase: "fase2", faseSelecionada: fase2 },
+      { fase: "fase3", faseSelecionada: fase3 },
+      { fase: "fase4", faseSelecionada: fase4 },
+      { fase: "fase5", faseSelecionada: fase5 },
     ];
 
-    fases.forEach((fase) => {
-      const faseAtual = fase.fase;
-      fase.faseSelecionada.forEach((corrida) => {
+    fases.forEach(({ fase, faseSelecionada }) => {
+      faseSelecionada.forEach((corrida) => {
         corrida.temposChegadas.forEach((chegada) => {
-          const codigo = chegada.equipe.codigo;
-          const tempoAtual = chegada.tempo;
+          const { codigo } = chegada.equipe;
+          const tempoAtualMs = converterTempoParaMilissegundos(chegada.tempo);
 
           if (
-            !melhoresTempos[faseAtual][codigo] ||
-            tempoAtual < melhoresTempos[faseAtual][codigo].tempo
+            !melhoresTempos[fase][codigo] ||
+            tempoAtualMs < melhoresTempos[fase][codigo].tempo
           ) {
-            melhoresTempos[faseAtual][codigo] = {
-              tempo: tempoAtual,
+            melhoresTempos[fase][codigo] = {
+              tempo: tempoAtualMs,
+              tempoFormatado: chegada.tempo,
               equipe: {
                 codigo: chegada.equipe.codigo,
                 nome: chegada.equipe.nome,
@@ -70,6 +64,13 @@ async function executar({}) {
         });
       });
     });
+
+    // Ordenar os tempos para cada fase
+    for (const fase in melhoresTempos) {
+      const equipes = Object.values(melhoresTempos[fase]);
+      equipes.sort((a, b) => a.tempo - b.tempo);
+      melhoresTempos[fase] = equipes;
+    }
 
     return StatusOk({
       data: {
