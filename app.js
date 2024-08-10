@@ -14,4 +14,6 @@ app.use("/", rotas);
 conexaoMongo().then(() => {
   app.listen(PORTA);
   console.log(`Servidor online na porta ${PORTA}`);
+}).catch((error) => {
+  process.exit(1);
 });
