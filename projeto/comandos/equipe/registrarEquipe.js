@@ -3,10 +3,25 @@ const StatusError = require("../../helpers/status/StatusError");
 const { StatusOk } = require("../../helpers/status/StatusOk");
 const Equipe = require("../../modelos/Equipe");
 
-async function executar({ nome, quantidadeIntegrantes, integrantes }) {
+async function executar({
+  nome,
+  quantidadeIntegrantes,
+  integrantes,
+  numeroCarrinho,
+}) {
   try {
-    validarParametros({ nome, quantidadeIntegrantes, integrantes });
-    const equipe = criarEquipe({ nome, quantidadeIntegrantes, integrantes });
+    validarParametros({
+      nome,
+      quantidadeIntegrantes,
+      integrantes,
+      numeroCarrinho,
+    });
+    const equipe = criarEquipe({
+      nome,
+      quantidadeIntegrantes,
+      integrantes,
+      numeroCarrinho,
+    });
     await gravarEquipe({ equipe });
 
     return StatusOk({
@@ -23,8 +38,13 @@ async function executar({ nome, quantidadeIntegrantes, integrantes }) {
   }
 }
 
-function validarParametros({ nome, quantidadeIntegrantes, integrantes }) {
-  if (!nome || !quantidadeIntegrantes || !integrantes) {
+function validarParametros({
+  nome,
+  quantidadeIntegrantes,
+  integrantes,
+  numeroCarrinho,
+}) {
+  if (!nome || !quantidadeIntegrantes || !integrantes || !numeroCarrinho) {
     throw new StatusError(
       "Preencha todos os campos obrigatórios (nome, integrantes e quantidade de integrantes).",
       400
@@ -90,9 +110,16 @@ function validarParametros({ nome, quantidadeIntegrantes, integrantes }) {
       );
     }
   }
+
+  if (typeof numeroCarrinho !== "string") {
+    throw new StatusError(
+      "O número do carrinho pertecente a equipe, deve ser do tipo texto.",
+      400
+    );
+  }
 }
 
-function criarEquipe({ nome, quantidadeIntegrantes, integrantes }) {
+function criarEquipe({ nome, quantidadeIntegrantes, integrantes, numeroCarrinho }) {
   try {
     const equipe = new Equipe({
       nome,
@@ -100,6 +127,7 @@ function criarEquipe({ nome, quantidadeIntegrantes, integrantes }) {
       integrantes,
       codigo: uuidv4(),
       ativa: true,
+      numeroCarrinho
     });
 
     return equipe;

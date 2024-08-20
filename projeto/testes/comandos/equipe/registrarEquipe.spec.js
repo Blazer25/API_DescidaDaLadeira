@@ -27,6 +27,7 @@ describe("Testes da função executar", () => {
         { nome: "Membro 2", RA: "456" },
         { nome: "Membro 3", RA: "789" },
       ],
+      numeroCarrinho: "10",
     };
 
     Equipe.prototype.save = jest.fn().mockResolvedValue(true);
@@ -55,6 +56,7 @@ describe("Testes da função executar", () => {
         { nome: "Membro 2", RA: "456" },
         { nome: "Membro 3", RA: "789" },
       ],
+      numeroCarrinho: "10",
     };
 
     StatusError.mockImplementation((message, status) => ({ message, status }));
@@ -80,6 +82,7 @@ describe("Testes da função executar", () => {
         { nome: "Membro 5", RA: "102" },
         { nome: "Membro 6", RA: "103" },
       ],
+      numeroCarrinho: "10",
     };
 
     StatusError.mockImplementation((message, status) => ({ message, status }));
@@ -99,6 +102,7 @@ describe("Testes da função executar", () => {
       nome: "Equipe Teste",
       quantidadeIntegrantes: 3,
       integrantes: "Não é um array",
+      numeroCarrinho: "10",
     };
 
     StatusError.mockImplementation((message, status) => ({ message, status }));
@@ -120,6 +124,7 @@ describe("Testes da função executar", () => {
         { nome: "Membro 1", RA: "123" },
         { nome: "Membro 2", RA: "456" },
       ],
+      numeroCarrinho: "10",
     };
 
     StatusError.mockImplementation((message, status) => ({ message, status }));
@@ -134,6 +139,30 @@ describe("Testes da função executar", () => {
     });
   });
 
+  it("deve lançar um StatusError quando o número do carrinho da equipe for inválido", async () => {
+    const dados = {
+      nome: "jhonny boi",
+      quantidadeIntegrantes: 3,
+      integrantes: [
+        { nome: "Membro 1", RA: "123" },
+        { nome: "Membro 2", RA: "456" },
+        { nome: "Membro 3", RA: "789" },
+      ],
+      numeroCarrinho: true,
+    };
+
+    StatusError.mockImplementation((message, status) => ({ message, status }));
+
+    const resultado = await executar(dados);
+
+    expect(resultado).toEqual({
+      erro: true,
+      status: 400,
+      mensagem:
+        "O número do carrinho pertecente a equipe, deve ser do tipo texto.",
+    });
+  });
+
   it("deve lançar um StatusError quando ocorrer um erro ao criar a equipe", async () => {
     const dados = {
       nome: "Equipe Teste",
@@ -143,6 +172,7 @@ describe("Testes da função executar", () => {
         { nome: "Membro 2", RA: "456" },
         { nome: "Membro 3", RA: "789" },
       ],
+      numeroCarrinho: "10",
     };
 
     Equipe.mockImplementation(() => {
@@ -169,6 +199,7 @@ describe("Testes da função executar", () => {
         { nome: "Membro 2", RA: "456" },
         { nome: "Membro 3", RA: "789" },
       ],
+      numeroCarrinho: "10",
     };
 
     const mockSave = jest.fn(() => {

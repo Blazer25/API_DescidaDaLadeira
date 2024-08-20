@@ -8,6 +8,15 @@ const listarTodasCorridas = async () => {
   }
 };
 
+const listarCorridaPeloID = async ({ id }) => {
+  try {
+    return Corrida.findOne({ id }, { _id: 0 });
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 module.exports = {
   listarTodasCorridas,
+  listarCorridaPeloID
 };

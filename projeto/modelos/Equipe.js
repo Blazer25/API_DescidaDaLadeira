@@ -10,7 +10,8 @@ const equipeSchema = new mongoose.Schema({
   nome: String,
   quantidadeIntegrantes: Number,
   integrantes: [integranteSchema],
-  ativa: Boolean
+  ativa: Boolean,
+  numeroCarrinho: String
 }, { _id: true });
 
 const Equipe = mongoose.model("Equipe", equipeSchema);
