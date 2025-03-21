@@ -4,19 +4,32 @@ const Equipe = require("../../modelos/Equipe");
 const consultasEquipe = require("../../servicos/mongo/consultas/equipes");
 const repositoriosEquipe = require("../../servicos/mongo/repositorios/equipes");
 
-async function executar({ codigoEquipe, nomeEquipe, dadosIntegrantes = [] }) {
+async function executar({
+  codigoEquipe,
+  nomeEquipe,
+  dadosIntegrantes = [],
+  numeroCarrinho,
+}) {
   try {
-    validarParametros({ codigoEquipe, nomeEquipe, dadosIntegrantes });
+    validarParametros({
+      codigoEquipe,
+      nomeEquipe,
+      dadosIntegrantes,
+      numeroCarrinho,
+    });
     const equipe = await listarEquipePeloCodigo({ codigo: codigoEquipe });
     verificaQuantidadeIntegrantes({ equipe, dadosIntegrantes });
+
     const dadosIntegrantesAtualizados = atualizarDadosIntegrantes({
       dadosIntegrantes,
       equipe,
     });
+
     const equipeAtualizada = instanciarEquipeAtualizada({
       equipeDesatualizada: equipe,
       nomeEquipe,
       dadosIntegrantes: dadosIntegrantesAtualizados,
+      numeroCarrinho
     });
 
     await atualizarEquipe({ codigo: codigoEquipe, equipe: equipeAtualizada });
@@ -35,7 +48,12 @@ async function executar({ codigoEquipe, nomeEquipe, dadosIntegrantes = [] }) {
   }
 }
 
-function validarParametros({ codigoEquipe, nomeEquipe, dadosIntegrantes }) {
+function validarParametros({
+  codigoEquipe,
+  nomeEquipe,
+  dadosIntegrantes,
+  numeroCarrinho,
+}) {
   if (!codigoEquipe || typeof codigoEquipe !== "string") {
     throw new StatusError(
       'Código da equipe é obrigatório e deve ser do tipo "texto".',
@@ -84,6 +102,13 @@ function validarParametros({ codigoEquipe, nomeEquipe, dadosIntegrantes }) {
         );
       }
     });
+
+    if (typeof numeroCarrinho !== "string") {
+      throw new StatusError(
+        "O número do carrinho pertecente a equipe, deve ser do tipo texto.",
+        400
+      );
+    }
   }
 }
 
@@ -127,6 +152,7 @@ function instanciarEquipeAtualizada({
   equipeDesatualizada,
   nomeEquipe,
   dadosIntegrantes,
+  numeroCarrinho
 }) {
   const integrantes = dadosIntegrantes || equipeDesatualizada.integrantes;
   const equipeAtualizada = new Equipe({
@@ -134,16 +160,14 @@ function instanciarEquipeAtualizada({
     nome: nomeEquipe || equipeDesatualizada.nome,
     integrantes: integrantes,
     quantidadeIntegrantes: integrantes.length,
+    numeroCarrinho
   });
 
   return equipeAtualizada;
 }
 
 async function atualizarEquipe({ codigo, equipe }) {
-  await repositoriosEquipe.atualizarEquipe(
-    { codigo },
-    equipe
-  );
+  await repositoriosEquipe.atualizarEquipe({ codigo }, equipe);
 }
 
 module.exports = {

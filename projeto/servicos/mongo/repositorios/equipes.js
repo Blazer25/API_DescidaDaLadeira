@@ -3,16 +3,16 @@ const Equipe = require("../../../modelos/Equipe");
 
 const atualizarEquipe = async (
   { codigo },
-  { nome, integrantes, RA, quantidadeIntegrantes }
+  { nome, integrantes, RA, quantidadeIntegrantes, numeroCarrinho }
 ) => {
   try {
     return await Equipe.findOneAndUpdate(
       { codigo },
-      { nome, integrantes, RA, quantidadeIntegrantes },
+      { nome, integrantes, RA, quantidadeIntegrantes, numeroCarrinho },
       { new: true }
     );
   } catch (error) {
-    throw new StatusError(error.message, error.status)
+    throw new StatusError(error.message, error.status);
   }
 };
 
@@ -20,11 +20,11 @@ const inativarAtivarEquipe = async ({ codigo, statusAlterar }) => {
   try {
     return await Equipe.updateOne({ codigo }, { ativa: statusAlterar });
   } catch (error) {
-    throw new StatusError(error.message, error.status)
+    throw new StatusError(error.message, error.status);
   }
 };
 
 module.exports = {
   atualizarEquipe,
-  inativarAtivarEquipe
+  inativarAtivarEquipe,
 };

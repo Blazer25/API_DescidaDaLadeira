@@ -16,6 +16,7 @@ async function executar({filtros}) {
         ativa: equipe.ativa,
         nome: equipe.nome,
         quantidadeIntegrantes: equipe.quantidadeIntegrantes,
+        numeroCarrinho: equipe.numeroCarrinho,
         integrantes: equipe.integrantes.map((integrante) => {
           return {
             nome: integrante.nome,

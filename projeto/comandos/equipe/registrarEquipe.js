@@ -46,7 +46,7 @@ function validarParametros({
 }) {
   if (!nome || !quantidadeIntegrantes || !integrantes || !numeroCarrinho) {
     throw new StatusError(
-      "Preencha todos os campos obrigatórios (nome, integrantes e quantidade de integrantes).",
+      "Preencha todos os campos obrigatórios (nome, número do carrinho, integrantes e quantidade de integrantes).",
       400
     );
   }

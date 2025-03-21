@@ -9,12 +9,14 @@ const equipeController = {};
 
 equipeController.registrar = async (req, res) => {
   try {
-    const { nome, quantidadeIntegrantes, integrantes } = req.body;
+    const { nome, quantidadeIntegrantes, integrantes, numeroCarrinho } =
+      req.body;
 
     const { erro, status, mensagem } = await registrarEquipe.executar({
       nome,
       quantidadeIntegrantes,
       integrantes,
+      numeroCarrinho,
     });
 
     if (erro) return res.status(status).json({ mensagem });
@@ -32,7 +34,7 @@ equipeController.listar = async (req, res) => {
     const { ativas, nome } = req.query;
     const filtros = {
       ativas,
-      nome
+      nome,
     };
     const { erro, status, mensagem, data } = await listarEquipes.executar({
       filtros,
@@ -54,13 +56,14 @@ equipeController.listar = async (req, res) => {
 
 equipeController.alterar = async (req, res) => {
   try {
-    const { nomeEquipe, dadosIntegrantes } = req.body;
+    const { nomeEquipe, dadosIntegrantes, numeroCarrinho } = req.body;
     const { codigoEquipe } = req.params;
 
     const { erro, status, mensagem } = await alterarEquipe.executar({
       codigoEquipe,
       nomeEquipe,
       dadosIntegrantes,
+      numeroCarrinho
     });
 
     if (erro) return res.status(status).json({ mensagem });
@@ -116,9 +119,10 @@ equipeController.listarPorFase = async (req, res) => {
     const filtros = {
       fase,
     };
-    const { erro, status, mensagem, data } = await listarEquipesPorFase.executar({
-      filtros,
-    });
+    const { erro, status, mensagem, data } =
+      await listarEquipesPorFase.executar({
+        filtros,
+      });
 
     if (erro) return res.status(status).json({ mensagem });
 
@@ -132,6 +136,5 @@ equipeController.listarPorFase = async (req, res) => {
     });
   }
 };
-
 
 module.exports = equipeController;
