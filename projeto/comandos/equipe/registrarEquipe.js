@@ -2,12 +2,14 @@ const { v4: uuidv4 } = require("uuid");
 const StatusError = require("../../helpers/status/StatusError");
 const { StatusOk } = require("../../helpers/status/StatusOk");
 const Equipe = require("../../modelos/Equipe");
+const { urlValida } = require("../../helpers/text");
 
 async function executar({
   nome,
   quantidadeIntegrantes,
   integrantes,
   numeroCarrinho,
+  logoUrl,
 }) {
   try {
     validarParametros({
@@ -15,12 +17,14 @@ async function executar({
       quantidadeIntegrantes,
       integrantes,
       numeroCarrinho,
+      logoUrl,
     });
     const equipe = criarEquipe({
       nome,
       quantidadeIntegrantes,
       integrantes,
       numeroCarrinho,
+      logoUrl,
     });
     await gravarEquipe({ equipe });
 
@@ -43,10 +47,17 @@ function validarParametros({
   quantidadeIntegrantes,
   integrantes,
   numeroCarrinho,
+  logoUrl,
 }) {
-  if (!nome || !quantidadeIntegrantes || !integrantes || !numeroCarrinho) {
+  if (
+    !nome ||
+    !quantidadeIntegrantes ||
+    !integrantes ||
+    !numeroCarrinho ||
+    !logoUrl
+  ) {
     throw new StatusError(
-      "Preencha todos os campos obrigatórios (nome, número do carrinho, integrantes e quantidade de integrantes).",
+      "Preencha todos os campos obrigatórios (nome, número do carrinho, integrantes, quantidade de integrantes e logo da equipe).",
       400
     );
   }
@@ -109,6 +120,18 @@ function validarParametros({
         400
       );
     }
+
+    if (
+      !integrantes[membro].curso ||
+      typeof integrantes[membro].curso !== "string"
+    ) {
+      throw new StatusError(
+        `O campo 'curso' do ${
+          membro + 1
+        }° membro é obrigatório e deve ser do tipo texto.`,
+        400
+      );
+    }
   }
 
   if (typeof numeroCarrinho !== "string") {
@@ -117,9 +140,22 @@ function validarParametros({
       400
     );
   }
+
+  if (!urlValida(logoUrl)) {
+    throw new StatusError(
+      "A URL da logo da equipe é inválida. Forneça uma URL válida.",
+      400
+    );
+  }
 }
 
-function criarEquipe({ nome, quantidadeIntegrantes, integrantes, numeroCarrinho }) {
+function criarEquipe({
+  nome,
+  quantidadeIntegrantes,
+  integrantes,
+  numeroCarrinho,
+  logoUrl,
+}) {
   try {
     const equipe = new Equipe({
       nome,
@@ -127,7 +163,8 @@ function criarEquipe({ nome, quantidadeIntegrantes, integrantes, numeroCarrinho 
       integrantes,
       codigo: uuidv4(),
       ativa: true,
-      numeroCarrinho
+      numeroCarrinho,
+      logoUrl,
     });
 
     return equipe;

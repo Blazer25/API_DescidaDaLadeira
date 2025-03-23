@@ -17,10 +17,12 @@ async function executar({filtros}) {
         nome: equipe.nome,
         quantidadeIntegrantes: equipe.quantidadeIntegrantes,
         numeroCarrinho: equipe.numeroCarrinho,
+        logoUrl: equipe.logoUrl,
         integrantes: equipe.integrantes.map((integrante) => {
           return {
             nome: integrante.nome,
             RA: integrante.RA,
+            curso: integrante.curso,
           };
         }),
       };

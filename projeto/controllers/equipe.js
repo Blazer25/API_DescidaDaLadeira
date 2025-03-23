@@ -9,7 +9,7 @@ const equipeController = {};
 
 equipeController.registrar = async (req, res) => {
   try {
-    const { nome, quantidadeIntegrantes, integrantes, numeroCarrinho } =
+    const { nome, quantidadeIntegrantes, integrantes, numeroCarrinho, logoUrl } =
       req.body;
 
     const { erro, status, mensagem } = await registrarEquipe.executar({
@@ -17,6 +17,7 @@ equipeController.registrar = async (req, res) => {
       quantidadeIntegrantes,
       integrantes,
       numeroCarrinho,
+      logoUrl
     });
 
     if (erro) return res.status(status).json({ mensagem });
@@ -56,14 +57,15 @@ equipeController.listar = async (req, res) => {
 
 equipeController.alterar = async (req, res) => {
   try {
-    const { nomeEquipe, dadosIntegrantes, numeroCarrinho } = req.body;
+    const { nomeEquipe, dadosIntegrantes, numeroCarrinho, logoUrl } = req.body;
     const { codigoEquipe } = req.params;
 
     const { erro, status, mensagem } = await alterarEquipe.executar({
       codigoEquipe,
       nomeEquipe,
       dadosIntegrantes,
-      numeroCarrinho
+      numeroCarrinho,
+      logoUrl
     });
 
     if (erro) return res.status(status).json({ mensagem });

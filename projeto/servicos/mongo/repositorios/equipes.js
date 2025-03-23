@@ -3,12 +3,12 @@ const Equipe = require("../../../modelos/Equipe");
 
 const atualizarEquipe = async (
   { codigo },
-  { nome, integrantes, RA, quantidadeIntegrantes, numeroCarrinho }
+  { nome, integrantes, RA, quantidadeIntegrantes, numeroCarrinho, logoUrl }
 ) => {
   try {
     return await Equipe.findOneAndUpdate(
       { codigo },
-      { nome, integrantes, RA, quantidadeIntegrantes, numeroCarrinho },
+      { nome, integrantes, RA, quantidadeIntegrantes, numeroCarrinho, logoUrl },
       { new: true }
     );
   } catch (error) {

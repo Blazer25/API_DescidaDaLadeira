@@ -1,5 +1,6 @@
 const StatusError = require("../../helpers/status/StatusError");
 const { StatusOk } = require("../../helpers/status/StatusOk");
+const { urlValida } = require("../../helpers/text");
 const Equipe = require("../../modelos/Equipe");
 const consultasEquipe = require("../../servicos/mongo/consultas/equipes");
 const repositoriosEquipe = require("../../servicos/mongo/repositorios/equipes");
@@ -9,6 +10,7 @@ async function executar({
   nomeEquipe,
   dadosIntegrantes = [],
   numeroCarrinho,
+  logoUrl,
 }) {
   try {
     validarParametros({
@@ -16,6 +18,7 @@ async function executar({
       nomeEquipe,
       dadosIntegrantes,
       numeroCarrinho,
+      logoUrl,
     });
     const equipe = await listarEquipePeloCodigo({ codigo: codigoEquipe });
     verificaQuantidadeIntegrantes({ equipe, dadosIntegrantes });
@@ -29,7 +32,8 @@ async function executar({
       equipeDesatualizada: equipe,
       nomeEquipe,
       dadosIntegrantes: dadosIntegrantesAtualizados,
-      numeroCarrinho
+      numeroCarrinho,
+      logoUrl,
     });
 
     await atualizarEquipe({ codigo: codigoEquipe, equipe: equipeAtualizada });
@@ -53,6 +57,7 @@ function validarParametros({
   nomeEquipe,
   dadosIntegrantes,
   numeroCarrinho,
+  logoUrl,
 }) {
   if (!codigoEquipe || typeof codigoEquipe !== "string") {
     throw new StatusError(
@@ -95,9 +100,16 @@ function validarParametros({
         );
       }
 
-      if (integrante.nome && typeof integrante.nome !== "string") {
+      if (!integrante.nome || typeof integrante.nome !== "string") {
         throw new StatusError(
           `O nome do ${index + 1}° integrante deve ser do tipo "texto"`,
+          400
+        );
+      }
+
+      if (!integrante.curso || typeof integrante.curso !== "string") {
+        throw new StatusError(
+          `O curso do ${index + 1}° integrante deve ser do tipo "texto"`,
           400
         );
       }
@@ -106,6 +118,13 @@ function validarParametros({
     if (typeof numeroCarrinho !== "string") {
       throw new StatusError(
         "O número do carrinho pertecente a equipe, deve ser do tipo texto.",
+        400
+      );
+    }
+
+    if (!urlValida(logoUrl)) {
+      throw new StatusError(
+        "A URL da logo da equipe é inválida. Forneça uma URL válida.",
         400
       );
     }
@@ -152,7 +171,8 @@ function instanciarEquipeAtualizada({
   equipeDesatualizada,
   nomeEquipe,
   dadosIntegrantes,
-  numeroCarrinho
+  numeroCarrinho,
+  logoUrl,
 }) {
   const integrantes = dadosIntegrantes || equipeDesatualizada.integrantes;
   const equipeAtualizada = new Equipe({
@@ -160,7 +180,8 @@ function instanciarEquipeAtualizada({
     nome: nomeEquipe || equipeDesatualizada.nome,
     integrantes: integrantes,
     quantidadeIntegrantes: integrantes.length,
-    numeroCarrinho
+    numeroCarrinho,
+    logoUrl,
   });
 
   return equipeAtualizada;
