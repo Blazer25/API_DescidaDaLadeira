@@ -8,7 +8,8 @@ const controllerUsuario = require("../controllers/usuario");
 const controllerAuth = require("../controllers/auth");
 const controllerEquipe = require("../controllers/equipe");
 const controllerCorrida = require("../controllers/corrida");
-const controllerRanking = require("../controllers/ranking.js")
+const controllerRanking = require("../controllers/ranking.js");
+const uploadController = require("../controllers/upload.js");
 
 // Rota padrão de verificação
 router.get("/", controllerServidor.getHealth);
@@ -37,5 +38,8 @@ router.delete("/corrida", verificaToken, controllerCorrida.deletar)
 
 //rotas do ranking
 router.get("/ranking", controllerRanking.listar)
+
+//outras rotas
+router.get("/gerar-url-upload-imagem", uploadController.gerarUrlUpload);
 
 module.exports = router;
