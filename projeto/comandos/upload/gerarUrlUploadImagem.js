@@ -2,10 +2,10 @@ const { generatePresignedUrl } = require("../../helpers/aws/s3");
 const StatusError = require("../../helpers/status/StatusError");
 const { StatusOk } = require("../../helpers/status/StatusOk");
 
-async function executar({ filename, contentType }) {
+async function executar({ fileName, contentType }) {
   try {
-    validarParametros({ filename, contentType });
-    const url = await generatePresignedUrl(filename, contentType);
+    validarParametros({ fileName, contentType });
+    const url = await generatePresignedUrl(fileName, contentType);
 
     return StatusOk({
       data: { url },
@@ -22,17 +22,17 @@ async function executar({ filename, contentType }) {
   }
 }
 
-function validarParametros({ filename, contentType }) {
-  if (!filename || !contentType) {
+function validarParametros({ fileName, contentType }) {
+  if (!fileName || !contentType) {
     throw new StatusError(
-      "Preencha todos os campos obrigatórios (filename e contentType).",
+      "Preencha todos os campos obrigatórios (fileName e contentType).",
       400
     );
   }
 
-  if (typeof filename !== "string" || typeof contentType !== "string") {
+  if (typeof fileName !== "string" || typeof contentType !== "string") {
     throw new StatusError(
-      "Os campos filename e contentType devem ser do tipo texto.",
+      "Os campos fileName e contentType devem ser do tipo texto.",
       400
     );
   }

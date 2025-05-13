@@ -4,10 +4,10 @@ const uploadController = {};
 
 uploadController.gerarUrlUpload = async (req, res) => {
   try {
-    const { filename, contentType } = req.query;
+    const { fileName, contentType } = req.query;
 
     const { erro, status, mensagem, data } = await gerarUrlUploadImagem.executar({
-      filename,
+      fileName,
       contentType,
     });
 

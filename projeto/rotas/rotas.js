@@ -40,6 +40,6 @@ router.delete("/corrida", verificaToken, controllerCorrida.deletar)
 router.get("/ranking", controllerRanking.listar)
 
 //outras rotas
-router.get("/gerar-url-upload-imagem", uploadController.gerarUrlUpload);
+router.post("/gerar-url-upload-imagem", uploadController.gerarUrlUpload);
 
 module.exports = router;

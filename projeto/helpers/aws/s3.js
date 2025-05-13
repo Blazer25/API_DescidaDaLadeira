@@ -15,7 +15,7 @@ const s3 = new AWS.S3({
 function generatePresignedUrl(key, contentType) {
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME_URL_ASSINADA,
-    Key: key,
+    Key: `logo-equipes/${key}`,
     Expires: 60 * 5, // 5 minutos
     ContentType: contentType,
   };

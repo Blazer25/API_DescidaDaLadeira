@@ -1,11 +1,10 @@
 export const urlValida = (url) => {
+  if (typeof url !== "string") {
+    return false;
+  }
 
-    if (typeof url !== "string") {
-        return false;
-    }
-
-    const urlRegex =
+  const urlRegex =
     /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+)(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)*$/i;
 
-    return urlRegex.test(url);
-}
+  return urlRegex.test(url);
+};
