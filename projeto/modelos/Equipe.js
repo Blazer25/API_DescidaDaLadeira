@@ -20,7 +20,7 @@ const equipeSchema = new mongoose.Schema(
     integrantes: [integranteSchema],
     ativa: Boolean,
     numeroCarrinho: String,
-    logoUrl: String,
+    logoUrl: String || null,
   },
   { _id: true }
 );

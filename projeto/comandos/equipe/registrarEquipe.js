@@ -3,6 +3,7 @@ const StatusError = require("../../helpers/status/StatusError");
 const { StatusOk } = require("../../helpers/status/StatusOk");
 const Equipe = require("../../modelos/Equipe");
 const { urlValida } = require("../../helpers/text");
+const consultasEquipe = require("../../servicos/mongo/consultas/equipes");
 
 async function executar({
   nome,
@@ -26,6 +27,17 @@ async function executar({
       numeroCarrinho,
       logoUrl,
     });
+
+    const equipeExistente = consultasEquipe.obterPeloNumeroDoCarrinho({
+      numeroCarrinho,
+    });
+    if (equipeExistente) {
+      throw new StatusError(
+        "Já existe uma equipe registrada com esse número de carrinho.",
+        400
+      );
+    }
+
     await gravarEquipe({ equipe });
 
     return StatusOk({
@@ -49,15 +61,9 @@ function validarParametros({
   numeroCarrinho,
   logoUrl,
 }) {
-  if (
-    !nome ||
-    !quantidadeIntegrantes ||
-    !integrantes ||
-    !numeroCarrinho ||
-    !logoUrl
-  ) {
+  if (!nome || !quantidadeIntegrantes || !integrantes || !numeroCarrinho) {
     throw new StatusError(
-      "Preencha todos os campos obrigatórios (nome, número do carrinho, integrantes, quantidade de integrantes e logo da equipe).",
+      "Preencha todos os campos obrigatórios (nome, número do carrinho, integrantes e quantidade de integrantes).",
       400
     );
   }
@@ -141,7 +147,7 @@ function validarParametros({
     );
   }
 
-  if (!urlValida(logoUrl)) {
+  if (logoUrl && !urlValida(logoUrl)) {
     throw new StatusError(
       "A URL da logo da equipe é inválida. Forneça uma URL válida.",
       400

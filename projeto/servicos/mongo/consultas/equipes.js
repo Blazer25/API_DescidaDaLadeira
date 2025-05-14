@@ -34,8 +34,20 @@ const listarTodasEquipesPorFase = async ({ filtros = {} }) => {
   }
 };
 
+const obterPeloNumeroDoCarrinho = async ({ numeroCarrinho }) => {
+  try {
+    return await Equipe.findOne(
+      { numeroCarrinho },
+      { _id: 0, codigo: 1, nome: 1 }
+    );
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 module.exports = {
   listarTodasEquipes,
   listarEquipePeloCodigo,
   listarTodasEquipesPorFase,
+  obterPeloNumeroDoCarrinho
 };

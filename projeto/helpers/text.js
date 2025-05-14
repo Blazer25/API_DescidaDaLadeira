@@ -3,8 +3,10 @@ export const urlValida = (url) => {
     return false;
   }
 
-  const urlRegex =
-    /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+)(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)*$/i;
-
-  return urlRegex.test(url);
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
 };
