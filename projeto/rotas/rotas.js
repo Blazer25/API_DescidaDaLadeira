@@ -35,6 +35,7 @@ router.get("/equipes/porFase", verificaToken, controllerEquipe.listarPorFase)
 router.post("/corrida", verificaToken, controllerCorrida.registrar)
 router.get("/corridas", verificaToken, controllerCorrida.listar)
 router.delete("/corrida", verificaToken, controllerCorrida.deletar)
+router.patch("/corrida/alterar-tempo-equipe", verificaToken, controllerCorrida.alterarTempoEquipe)
 
 //rotas do ranking
 router.get("/ranking", controllerRanking.listar)
