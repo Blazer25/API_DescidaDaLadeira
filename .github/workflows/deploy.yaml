@@ -38,7 +38,7 @@ jobs:
       - name: Instalando dependências
         run: npm install
 
-      - name: Build com AWS SAM (não faz build TS, só empacota)
+      - name: Build com AWS SAM
         run: sam build --use-container
 
       - name: Deploy
@@ -50,11 +50,4 @@ jobs:
             --capabilities CAPABILITY_IAM \
             --region us-east-1 \
             --no-fail-on-empty-changeset \
-            --parameter-overrides \
-              NodeEnv=producao \
-              MongoUriProd=${{ secrets.MONGODB_URI_PROD }} \
-              JwtSecret=${{ secrets.JWT_SECRET }} \
-              AwsAccessKeyId=${{ secrets.AWS_ACCESS_KEY_ID }} \
-              AwsSecretAccessKey=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-              AwsBucketName=${{ secrets.AWS_BUCKET_NAME_URL_ASSINADA }} \
-              AwsRegion=us-east-1
+            --parameter-overrides NodeEnv=producao MongoUriProd=${{ secrets.MONGODB_URI_PROD }} JwtSecret=${{ secrets.JWT_SECRET }} AwsAccessKeyId=${{ secrets.AWS_ACCESS_KEY_ID }} AwsSecretAccessKey=${{ secrets.AWS_SECRET_ACCESS_KEY }} AwsBucketName=${{ secrets.AWS_BUCKET_NAME_URL_ASSINADA }} AwsRegion=us-east-1
