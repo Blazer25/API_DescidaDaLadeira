@@ -42,7 +42,7 @@ jobs:
         run: sam build --use-container
 
       - name: Deploy
-        run: |
+        run: >
           sam deploy \
             --template-file template.yaml \
             --stack-name api-descida-da-ladeira-prod \
