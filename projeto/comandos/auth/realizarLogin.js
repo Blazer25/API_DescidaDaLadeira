@@ -71,7 +71,7 @@ function logarUsuario({ usuario }) {
   const SECRET = process.env.JWT_SECRET;
 
   return jwt.sign({ id: usuario._id }, SECRET, {
-    expiresIn: "12h",
+    expiresIn: "24h",
   });
 }
 module.exports = {
