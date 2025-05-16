@@ -1,0 +1,179 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Lambda para a API Descida da Ladeira
+
+Globals:
+  Function:
+    Timeout: 60
+    Runtime: nodejs20.x
+    MemorySize: 1024
+
+Parameters:
+  NodeEnv:
+    Type: String
+    Description: "Ambiente da aplicação (ex: development, production)"
+  MongoUriProd:
+    Type: String
+    Description: String de conexão MongoDB Produção
+    NoEcho: true
+  JwtSecret:
+    Type: String
+    Description: Segredo JWT
+    NoEcho: true
+  AwsAccessKeyId:
+    Type: String
+    Description: AWS Access Key
+    NoEcho: true
+  AwsSecretAccessKey:
+    Type: String
+    Description: AWS Secret Key
+    NoEcho: true
+  AwsBucketName:
+    Type: String
+    Description: Nome do bucket S3
+  AwsRegion:
+    Type: String
+    Description: Região AWS
+
+Resources:
+  apiDescidaDaLadeira:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: v1
+      Cors:
+        AllowMethods: "'*'"
+        AllowHeaders: "'*'"
+        AllowOrigin: "'*'"
+
+  apiDescidaDaLadeiraFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: app.handler
+      Events:
+        Root:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /
+            Method: get
+        Versao:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /versao
+            Method: get
+        AuthRegistrar:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /auth/registrar
+            Method: post
+        AuthLogin:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /auth/login
+            Method: post
+        AuthVerificarToken:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /auth/verificar-token
+            Method: get
+        UsuarioListar:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /usuario/{usuario}
+            Method: get
+        EquipeRegistrar:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /equipe
+            Method: post
+        EquipeRegistrarPorFase:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /equipes/porFase
+            Method: post
+        EquipeInativarAtivar:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /equipe/inativarAtivar/{codigoEquipe}
+            Method: post
+        EquipeAlterar:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /equipe/{codigoEquipe}
+            Method: patch
+        EquipesListar:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /equipes
+            Method: get
+        EquipesPorFaseListar:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /equipes/porFase
+            Method: get
+        CorridaRegistrar:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /corrida
+            Method: post
+        CorridasListar:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /corridas
+            Method: get
+        CorridaDeletar:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /corrida
+            Method: delete
+        CorridaAlterarTempoEquipe:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /corrida/alterar-tempo-equipe
+            Method: patch
+        RankingListar:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /ranking
+            Method: get
+        GerarUrlUploadImagem:
+          Type: Api
+          Properties:
+            RestApiId: !Ref apiDescidaDaLadeira
+            Path: /gerar-url-upload-imagem
+            Method: post
+      Environment:
+        Variables:
+          NODE_ENV: !Ref NodeEnv
+          PORTA: "0"
+          JWT_SECRET: !Ref JwtSecret
+          MONGODB_URI_PROD: !Ref MongoUriProd
+          AWS_ACCESS_KEY_ID: !Ref AwsAccessKeyId
+          AWS_SECRET_ACCESS_KEY: !Ref AwsSecretAccessKey
+          AWS_BUCKET_NAME_URL_ASSINADA: !Ref AwsBucketName
+          AWS_REGION: !Ref AwsRegion
+
+Outputs:
+  ApiUrl:
+    Description: "URL base da API Descida da Ladeira"
+    Value: !Sub "https://${apiDescidaDaLadeira}.execute-api.${AWS::Region}.amazonaws.com/v1/"
+  LambdaFunctionArn:
+    Description: "ARN da função Lambda principal"
+    Value: !GetAtt apiDescidaDaLadeiraFunction.Arn

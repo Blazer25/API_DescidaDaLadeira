@@ -1,0 +1,42 @@
+{
+  // Define o formato do código ao salvar
+  "editor.formatOnSave": true,
+
+  // Configurações de tabulação
+  "editor.tabSize": 2, // Define o número de espaços para a tabulação
+  "editor.insertSpaces": true, // Usa espaços em vez de tabulação (true) ou tabs (false)
+
+  // Usa o Prettier como formatador (ajuste se estiver usando outro formatador)
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // Configura o formatador para TypeScript e JavaScript (se estiver usando Prettier)
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // Adicionar outras linguagens conforme necessário
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+
+  "yaml.customTags": [
+    "!Sub",
+    "!Ref",
+    "!GetAtt",
+    "!GetAZs",
+    "!ImportValue",
+    "!Select",
+    "!Split",
+    "!Join",
+    "!FindInMap"
+  ]
+}

@@ -1,0 +1,60 @@
+name: Deploy API Descida da Ladeira
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout no repositório
+        uses: actions/checkout@v2
+
+      - name: Configurando SAM
+        uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+
+      - name: Configurando variáveis de ambiente AWS
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Configurando versão do Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Limpando cache
+        run: npm cache clean --force
+
+      - name: Removendo node_modules
+        run: rm -rf node_modules
+
+      - name: Instalando dependências
+        run: npm install
+
+      - name: Build com AWS SAM (não faz build TS, só empacota)
+        run: sam build --use-container
+
+      - name: Deploy
+        run: |
+          sam deploy \
+            --template-file template.yaml \
+            --stack-name api-descida-da-ladeira-prod \
+            --s3-bucket ${{ secrets.S3_BUCKET }} \
+            --capabilities CAPABILITY_IAM \
+            --region us-east-1 \
+            --no-fail-on-empty-changeset \
+            --parameter-overrides \
+              NodeEnv=producao \
+              MongoUriProd=${{ secrets.MONGODB_URI_PROD }} \
+              JwtSecret=${{ secrets.JWT_SECRET }} \
+              AwsAccessKeyId=${{ secrets.AWS_ACCESS_KEY_ID }} \
+              AwsSecretAccessKey=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+              AwsBucketName=${{ secrets.AWS_BUCKET_NAME_URL_ASSINADA }} \
+              AwsRegion=us-east-1
