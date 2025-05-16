@@ -8,9 +8,10 @@ on:
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout no repositório
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Configurando SAM
         uses: aws-actions/setup-sam@v2
@@ -29,11 +30,10 @@ jobs:
         with:
           node-version: 20
 
-      - name: Limpando cache
-        run: npm cache clean --force
-
-      - name: Removendo node_modules
-        run: rm -rf node_modules
+      - name: Limpando cache e removendo pastas desnecessárias
+        run: |
+          npm cache clean --force
+          rm -rf build node_modules package-lock.json
 
       - name: Instalando dependências
         run: npm install
@@ -42,7 +42,6 @@ jobs:
         run: sam build --use-container
 
       - name: Deploy
-        shell: bash
         run: |
           sam deploy \
             --template-file template.yaml \
@@ -51,6 +50,13 @@ jobs:
             --capabilities CAPABILITY_IAM \
             --region us-east-1 \
             --no-fail-on-empty-changeset \
-            --parameter-overrides "NodeEnv=producao MongoUriProd=${{ secrets.MONGODB_URI_PROD }} JwtSecret=${{ secrets.JWT_SECRET }} AwsAccessKeyId=${{ secrets.AWS_ACCESS_KEY_ID }} AwsSecretAccessKey=${{ secrets.AWS_SECRET_ACCESS_KEY }} AwsBucketName=${{ secrets.AWS_BUCKET_NAME_URL_ASSINADA }} AwsRegion=us-east-1"
+            --parameter-overrides \
+            ParameterKey=NodeEnv,ParameterValue=producao \
+            ParameterKey=MongoUriProd,ParameterValue=${{ secrets.MONGODB_URI_PROD }} \
+            ParameterKey=JwtSecret,ParameterValue=${{ secrets.JWT_SECRET }} \
+            ParameterKey=AwsAccessKeyId,ParameterValue=${{ secrets.AWS_ACCESS_KEY_ID }} \
+            ParameterKey=AwsSecretAccessKey,ParameterValue=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+            ParameterKey=AwsBucketName,ParameterValue=${{ secrets.AWS_BUCKET_NAME_URL_ASSINADA }} \
+            ParameterKey=AwsRegion,ParameterValue=us-east-1
     env:
       PORTA: 0
