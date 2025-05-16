@@ -47,8 +47,10 @@ jobs:
           sam deploy \
             --template-file template.yaml \
             --stack-name api-descida-da-ladeira-prod \
-            --s3-bucket ${{ secrets.S3_BUCKET }} \
+            --s3-bucket "${{ secrets.S3_BUCKET }}" \
             --capabilities CAPABILITY_IAM \
             --region us-east-1 \
             --no-fail-on-empty-changeset \
             --parameter-overrides "NodeEnv=producao MongoUriProd=${{ secrets.MONGODB_URI_PROD }} JwtSecret=${{ secrets.JWT_SECRET }} AwsAccessKeyId=${{ secrets.AWS_ACCESS_KEY_ID }} AwsSecretAccessKey=${{ secrets.AWS_SECRET_ACCESS_KEY }} AwsBucketName=${{ secrets.AWS_BUCKET_NAME_URL_ASSINADA }} AwsRegion=us-east-1"
+    env:
+      PORTA: 0
