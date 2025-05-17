@@ -21,7 +21,7 @@ const conectarMongo = async () => {
       mongoUri = process.env.MONGODB_URI_PROD;
       console.info("Conectando ao MongoDB de Produção");
     } else {
-      mongoUri = process.env.MONGODB_URI;
+      mongoUri = process.env.MONGODB_URI_PROD;
       console.info("Conectando ao MongoDB de Teste");
     }
 

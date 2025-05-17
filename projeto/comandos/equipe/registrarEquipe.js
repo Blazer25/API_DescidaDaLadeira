@@ -28,9 +28,10 @@ async function executar({
       logoUrl,
     });
 
-    const equipeExistente = consultasEquipe.obterPeloNumeroDoCarrinho({
+    const equipeExistente = await consultasEquipe.obterPeloNumeroDoCarrinho({
       numeroCarrinho,
     });
+
     if (equipeExistente) {
       throw new StatusError(
         "Já existe uma equipe registrada com esse número de carrinho.",
